@@ -1,11 +1,21 @@
-const firebaseConfig = {
-    apiKey: "AIzaSyBtzKJSU7FgABAEl9AX-6ty-JbVzMlCGP4",
-    authDomain: "fir-auth-tutorial-23abd.firebaseapp.com",
-    projectId: "fir-auth-tutorial-23abd",
-    storageBucket: "fir-auth-tutorial-23abd.appspot.com",
-    messagingSenderId: "438234252998",
-    appId: "1:438234252998:web:c26df2722e0a709b3b39c7",
-    measurementId: "G-46MG7BQE7E",
+import { 
+    FIREBASE_API_KEY,
+    FIREBASE_AUTH_DOMAIN,
+    FIREBASE_PROJECT_ID,
+    FIREBASE_STORAGE_BUCKET,
+    FIREBASE_MESSAGING_SENDER_ID,
+    FIREBASE_APP_ID,
+    FIREBASE_MEASUREMENT_ID
+  } from '@env';
+  
+  const firebaseConfig = {
+    apiKey: FIREBASE_API_KEY,
+    authDomain: FIREBASE_AUTH_DOMAIN,
+    projectId: FIREBASE_PROJECT_ID,
+    storageBucket: FIREBASE_STORAGE_BUCKET,
+    messagingSenderId: FIREBASE_MESSAGING_SENDER_ID,
+    appId: FIREBASE_APP_ID,
+    measurementId: FIREBASE_MEASUREMENT_ID,
   };
   
   export default firebaseConfig;
