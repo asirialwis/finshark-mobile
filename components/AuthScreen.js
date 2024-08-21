@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from '@firebase/auth';
+import Toast from 'react-native-toast-message';
 
 const AuthScreen = ({ email, setEmail, password, setPassword, isLogin, setIsLogin, auth }) => {
   const handleAuthentication = async () => {
@@ -9,13 +10,34 @@ const AuthScreen = ({ email, setEmail, password, setPassword, isLogin, setIsLogi
         // Sign in
         await signInWithEmailAndPassword(auth, email, password);
         console.log('User signed in successfully!');
+        Toast.show({
+          type: 'success',
+          text1: 'Success',
+          text2: 'Signed In successfully!',
+          visibilityTime: 2000, // Duration in milliseconds
+          position: 'top', // 'top' or 'bottom'
+        });
       } else {
         // Sign up
         await createUserWithEmailAndPassword(auth, email, password);
         console.log('User created successfully!');
+        Toast.show({
+          type: 'success',
+          text1: 'Success',
+          text2: 'Signed In successfully!',
+          visibilityTime: 2000, // Duration in milliseconds
+          position: 'top', // 'top' or 'bottom'
+        });
       }
     } catch (error) {
       console.error('Authentication error:', error.message);
+      Toast.show({
+        type: 'error',
+        text1: 'Error',
+        text2: error.message,
+        visibilityTime: 4000,
+        position: 'top',
+      });
     }
   };
 

@@ -5,6 +5,7 @@ import { getAuth, onAuthStateChanged, signOut } from '@firebase/auth';
 import firebaseConfig from './firebaseConfig';
 import AuthScreen from './components/AuthScreen';
 import AuthenticatedScreen from './components/AuthenticatedScreen';
+import Toast from 'react-native-toast-message';
 
 const app = initializeApp(firebaseConfig);
 
@@ -29,13 +30,28 @@ const App = () => {
         // If user is already authenticated, log out
         console.log('User logged out successfully!');
         await signOut(auth);
+        Toast.show({
+          type: 'success',
+          text1: 'Success',
+          text2: 'User logged out successfully!',
+          visibilityTime: 2000, // Duration in milliseconds
+          position: 'top', // 'top' or 'bottom'
+        });
       }
     } catch (error) {
       console.error('Authentication error:', error.message);
+      Toast.show({
+        type: 'error',
+        text1: 'Error',
+        text2: error.message,
+        visibilityTime: 4000,
+        position: 'top',
+      });
     }
   };
 
   return (
+    <>
     <ScrollView contentContainerStyle={styles.container}>
       {user ? (
         <AuthenticatedScreen user={user} handleAuthentication={handleAuthentication} />
@@ -51,6 +67,8 @@ const App = () => {
         />
       )}
     </ScrollView>
+     <Toast ref={(ref) => Toast.setRef(ref)} />
+     </>
   );
 };
 
