@@ -1,33 +1,58 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, ScrollView } from 'react-native';
+import { ScrollView, StyleSheet } from 'react-native';
 import { initializeApp } from '@firebase/app';
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { getAuth, onAuthStateChanged, signOut } from '@firebase/auth';
+import firebaseConfig from './firebaseConfig';
+import AuthScreen from './components/AuthScreen';
+import AuthenticatedScreen from './components/AuthenticatedScreen';
 
-const firebaseConfig = {
+const app = initializeApp(firebaseConfig);
 
-  apiKey: "AIzaSyBtzKJSU7FgABAEl9AX-6ty-JbVzMlCGP4",
-  authDomain: "fir-auth-tutorial-23abd.firebaseapp.com",
-  projectId: "fir-auth-tutorial-23abd",
-  storageBucket: "fir-auth-tutorial-23abd.appspot.com",
-  messagingSenderId: "438234252998",
-  appId: "1:438234252998:web:c26df2722e0a709b3b39c7",
-  measurementId: "G-46MG7BQE7E"
+const App = () => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [user, setUser] = useState(null); // Track user authentication state
+  const [isLogin, setIsLogin] = useState(true);
 
-};
+  const auth = getAuth(app);
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      setUser(user);
+    });
 
+    return () => unsubscribe();
+  }, [auth]);
 
-export default function App() {
+  const handleAuthentication = async () => {
+    try {
+      if (user) {
+        // If user is already authenticated, log out
+        console.log('User logged out successfully!');
+        await signOut(auth);
+      }
+    } catch (error) {
+      console.error('Authentication error:', error.message);
+    }
+  };
+
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <ScrollView contentContainerStyle={styles.container}>
+      {user ? (
+        <AuthenticatedScreen user={user} handleAuthentication={handleAuthentication} />
+      ) : (
+        <AuthScreen
+          email={email}
+          setEmail={setEmail}
+          password={password}
+          setPassword={setPassword}
+          isLogin={isLogin}
+          setIsLogin={setIsLogin}
+          auth={auth}
+        />
+      )}
+    </ScrollView>
   );
-}
-
-
-
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -37,40 +62,6 @@ const styles = StyleSheet.create({
     padding: 16,
     backgroundColor: '#f0f0f0',
   },
-  authContainer: {
-    width: '80%',
-    maxWidth: 400,
-    backgroundColor: '#fff',
-    padding: 16,
-    borderRadius: 8,
-    elevation: 3,
-  },
-  title: {
-    fontSize: 24,
-    marginBottom: 16,
-    textAlign: 'center',
-  },
-  input: {
-    height: 40,
-    borderColor: '#ddd',
-    borderWidth: 1,
-    marginBottom: 16,
-    padding: 8,
-    borderRadius: 4,
-  },
-  buttonContainer: {
-    marginBottom: 16,
-  },
-  toggleText: {
-    color: '#3498db',
-    textAlign: 'center',
-  },
-  bottomContainer: {
-    marginTop: 20,
-  },
-  emailText: {
-    fontSize: 18,
-    textAlign: 'center',
-    marginBottom: 20,
-  },
 });
+
+export default App;
