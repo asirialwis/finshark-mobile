@@ -21,7 +21,7 @@ const AuthScreen = ({ email, setEmail, password, setPassword, isLogin, setIsLogi
         // Sign up
         await createUserWithEmailAndPassword(auth, email, password);
         console.log('User created successfully!');
-        Toast.show({
+         Toast.show({
           type: 'success',
           text1: 'Success',
           text2: 'Signed In successfully!',
